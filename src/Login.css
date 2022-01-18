@@ -10,6 +10,7 @@
 .login > img {
     width: 45%;
     margin-bottom: 3rem;
+    opacity: .8;
 }
 
 .login > a {

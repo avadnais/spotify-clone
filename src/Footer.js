@@ -10,13 +10,11 @@ import { Grid, Slider } from "@mui/material";
 import { VolumeDown } from "@mui/icons-material";
 import { useDataLayerValue } from "./DataLayer";
 
-function Footer({spotify}) {
-  const [{ device_id, volume, item, playing}, dispatch] = useDataLayerValue();
-  const INTERVAL = 250;
-  let timer;
+function Footer({ spotify }) {
+  const [{ volume, item, playing }, dispatch] =
+    useDataLayerValue();
   useEffect(() => {
     spotify.getMyCurrentPlaybackState().then((response) => {
-    
       dispatch({
         type: "SET_ITEM",
         action: response.item,
@@ -27,19 +25,24 @@ function Footer({spotify}) {
         action: response.is_playing,
       });
     });
+
+    spotify.getMyCurrentPlayingTrack().then((response) => {
+      console.log("Currently playing 🎵", response.item.id);
+      dispatch({
+        type: "SET_CURRENT_TRACK_ID",
+        current_track_id: response.item.id,
+      });
+    });
   }, [spotify]);
 
   const handleChange = (e) => {
-    console.log(e)
-    console.log(e.target)
-    let _volume = e.target.childNodes[0].value //MUI Slider location of value
+    let _volume = e.target.childNodes[0].value; //MUI Slider location of value
     dispatch({
-      type: 'SET_VOLUME',
-      volume: _volume
-    })
-    spotify.setVolume(_volume)
-  }
-    
+      type: "SET_VOLUME",
+      volume: _volume,
+    });
+    spotify.setVolume(_volume);
+  };
 
   const handlePlayPause = () => {
     if (playing) {
@@ -82,7 +85,7 @@ function Footer({spotify}) {
         {item ? (
           <div className="footer_songInfo">
             <h4>{item.name}</h4>
-            <p>{item.artists.map((artist) => artist.name).join(', ')}</p>
+            <p>{item.artists.map((artist) => artist.name).join(", ")}</p>
           </div>
         ) : (
           <div className="footer_songInfo">
@@ -114,12 +117,12 @@ function Footer({spotify}) {
             <VolumeDown />
           </Grid>
           <Grid item xs>
-            <Slider 
-            min={0}
-            max={100}
-            value={volume}
-            step={1}
-            onChangeCommitted={handleChange}
+            <Slider
+              min={0}
+              max={100}
+              value={volume}
+              step={1}
+              onChangeCommitted={handleChange}
             />
           </Grid>
         </Grid>

@@ -5,7 +5,6 @@ import { getTokenFromURL } from "./spotify";
 import SpotifyWebApi from "spotify-web-api-js";
 import { Dashboard } from "./Dashboard";
 import { useDataLayerValue } from "./DataLayer";
-import { getSpotifyLinkTitle } from "react-spotify-web-playback/lib/utils";
 
 const spotify = new SpotifyWebApi();
 
@@ -60,7 +59,16 @@ export const App = () => {
         discover_weekly: response,
       });
     });
+
+    spotify.getMyCurrentPlayingTrack().then((response) => {
+      console.log("Currently playing 🎵", response.item.id)
+      dispatch({
+        type: 'SET_CURRENT_TRACK_ID',
+        current_track_id: response.item.id
+      })
+    })
   }, []);
+
 
   return (
     <div className="app">

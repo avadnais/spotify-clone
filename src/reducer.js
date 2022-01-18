@@ -45,10 +45,15 @@ const reducer = (state, action) => {
                 ...state,
                 item: action.item
             }
-        case 'SET_ID':
+        case 'SET_DEVICE_ID':
             return {
                 ...state,
                 id: action.id
+            }
+        case 'SET_CURRENT_TRACK_ID':
+            return {
+                ...state,
+                current_track_id: action.current_track_id
             }
         case 'SET_PLAYING':
             return {

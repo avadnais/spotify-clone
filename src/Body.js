@@ -48,7 +48,7 @@ function Body({spotify}) {
               dispatch({
                 type: "SET_ID" ,
                 id: id
-              })
+              });
               
             });
             
