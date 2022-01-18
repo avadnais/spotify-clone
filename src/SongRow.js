@@ -1,0 +1,34 @@
+import React from 'react'
+import './SongRow.css';
+import { DataLayerContext, useDataLayerValue } from "./DataLayer";
+import GraphicEqIcon from '@mui/icons-material/GraphicEq';
+
+function SongRow({track, playSong, i}) {
+
+    const handleClick = () => {
+        playSong(track.id)
+    }
+
+    const [{item, id}] = useDataLayerValue();
+
+    return (
+        <div id={track.id} className='songRow' onClick={handleClick}>
+            
+            <div className="songRow_index_container" id={"index_container_" + track.id}>
+                {track.id === id ? <GraphicEqIcon /> : <h4 className='songRow_index'>{i+1}</h4>}
+            </div>
+            
+            
+            <img className='songRow_album' src={track.album.images[0].url} alt="" />
+            <div className="songRow_info"> 
+                <h1>{track.name}</h1>
+                <p>
+                    {track.artists.map((artist) => artist.name).join(", ")} -{" "}
+                    {track.album.name}
+                </p>
+            </div>
+        </div>
+    )
+}
+
+export default SongRow

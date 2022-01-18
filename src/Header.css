@@ -1,0 +1,42 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.header_left {
+    display: flex;
+    flex: .5;
+    align-items: center;
+    background-color: rgba(255,255,255,.3);
+    border-radius: 2rem;
+    padding: .75rem;
+    min-width: 6rem;
+    margin-right: 1rem;
+}
+
+.header_left input {
+    margin-left: 1rem;
+    border: none;
+    background-color: rgba(255,255,255,0);
+    color: white;
+    width: 100%;
+    font-size: 1.25rem;
+    
+}
+.header_left input:focus {
+    outline: none;
+}
+::placeholder{
+    color: rgba(0, 0, 0, .2);
+}
+
+.header_right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header_right h4 {
+    margin-left: .75rem;
+}

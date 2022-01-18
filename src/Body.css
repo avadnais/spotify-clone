@@ -1,0 +1,66 @@
+.body {
+    width: 100vw;
+    background: linear-gradient(rgb(55, 63, 81), rgba(0, 0, 0, 1));
+    flex: .8;
+    height: 100vh;
+    color: white;
+    padding: 2rem;
+    overflow-y: overlay;
+    padding-bottom: 100px;
+}
+
+.body::-webkit-scrollbar {
+    display: none;
+}
+
+.body_info {
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem;
+}
+
+.body_infoText {
+    flex: 1;
+}
+.body_infoText h2 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+.body_infoText p {
+    font: 1.15rem;
+}
+
+.body_info .album_cover {
+    height: 20vw;
+    margin: 0 1.5rem;
+    box-shadow: 0 .25rem 4rem rgba(0, 0, 0, .5);
+}
+
+.body_icons {
+    display: flex;
+    align-items: center;
+}
+
+.body_icons .MuiSvgIcon-root {
+    margin-right: 1.5rem;
+}
+
+.body_shuffle {
+    font-size: 5rem !important;
+    margin: 1.5rem 1.5rem 1.5rem 4rem; 
+}
+
+.body_green {
+    color: green;
+}
+
+
+.body_shuffle:hover {
+    transition: .1s transform ease-in;
+    transform: scale(1.08);
+}
+
+.body_songs {
+    margin: 1.5rem -2rem;
+}
+
