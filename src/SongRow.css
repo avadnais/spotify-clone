@@ -1,44 +1,109 @@
 .songRow {
-    margin-left: 1.5rem;
-    padding: .5rem;
-    padding-left: 2rem;
-    display: flex;
-    align-items: center;
-    color: white;
+  margin-left: 1.5rem;
+  padding: 0.5rem;
+  padding-left: 2rem;
+  display: flex;
+  align-items: center;
+  color: white;
 }
 
 .songRow:hover {
-    cursor: pointer;
-    background-color: black;
-    opacity: .8;
+  cursor: pointer;
+  background-color: black;
+  opacity: 0.8;
 }
 
 .songRow_info {
-    margin-left: 1.5rem;
+  margin-left: 1.5rem;
 }
 
 .songRow_info h1 {
-    font-size: 1.1rem;
+  font-size: 1.1rem;
 }
 
 .songRow_info p {
-    font-size: 1rem;
-    margin-top: .15rem;
-    color: gray;
+  font-size: 1rem;
+  margin-top: 0.15rem;
+  color: gray;
 }
 
 .songRow_album {
-    height: 3rem;
-    width: 3rem;
+  height: 3rem;
+  width: 3rem;
 }
 
 .songRow_index_container {
-    width: 4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .songRow_index {
-    color: grey;
-    font-weight: 300;
+  color: grey;
+  font-weight: 300;
+}
+
+#songRow_audioWave {
+  display: block;
+  justify-content: flex-start;
+  position: relative;
+  margin-right: auto;
+  margin-left: 30%
+}
+
+.songRow_audioWave span {
+  display: block;
+  bottom: 0px;
+  width: 5px;
+  height: 5px;
+  background: green;
+  position: absolute;
+  border-radius: 3px;
+  animation: audio-wave 1.5s infinite ease-in-out;
+}
+
+.songRow_audioWave span:nth-child(2) {
+  left: 5px;
+  animation-delay: 0.2s;
+}
+
+.songRow_audioWave span:nth-child(3) {
+  left: 10px;
+  animation-delay: 0.4s;
+}
+
+.songRow_audioWave span:nth-child(4) {
+  left: 15px;
+  animation-delay: 0.6s;
+}
+
+.songRow_audioWave span:nth-child(5) {
+  left: 20px;
+  animation-delay: 0.8s;
+}
+
+@keyframes audio-wave {
+  0% {
+    height: 5px;
+    transform: translateY(0px);
+    background: green;
+  }
+  25% {
+    height: 30px;
+    transform: translateY(15px);
+    background: greenyellow;
+  }
+  /*effect is to animate the height of each span from 5px to 30px*/
+  /*translateY makes Y axis move down to give the effect that it is growing from the center*/
+
+  50% {
+    height: 5px;
+    transform: translateY(0px);
+    background: green;
+  }
+  100% {
+    height: 5px;
+    transform: translateY(0px);
+    background: green;
+  }
 }

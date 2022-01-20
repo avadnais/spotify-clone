@@ -6,11 +6,12 @@ import SpotifyWebApi from "spotify-web-api-js";
 import { Dashboard } from "./Dashboard";
 import { useDataLayerValue } from "./DataLayer";
 
+
 const spotify = new SpotifyWebApi();
 
 export const App = () => {
-  const [{ user, token, volume }, dispatch] = useDataLayerValue();
-
+  const [{ token }, dispatch] = useDataLayerValue();
+  
 
   // run code based on given condition (blank second param = run only once)
   useEffect(() => {
@@ -32,7 +33,7 @@ export const App = () => {
     });
 
     //set first device in list to active and get volume
-    spotify.getMyDevices().then((r) => {
+/*     spotify.getMyDevices().then((r) => {
       dispatch({
         type: 'SET_VOLUME',
         volume: r.devices[0].volume_percent
@@ -44,7 +45,7 @@ export const App = () => {
       spotify.transferMyPlayback([r.devices[0].id], {
         'is_active': 'true'
       })
-    })
+    }) */
 
     spotify.getUserPlaylists().then((playlists) => {
       dispatch({
@@ -60,14 +61,14 @@ export const App = () => {
       });
     });
 
-    spotify.getMyCurrentPlayingTrack().then((response) => {
+/*      spotify.getMyCurrentPlayingTrack().then((response) => {
       console.log("Currently playing 🎵", response.item.id)
       dispatch({
-        type: 'SET_CURRENT_TRACK_ID',
-        current_track_id: response.item.id
+        type: 'SET_CURRENT_TRACK',
+        current_track: response.item.id
       })
-    })
-  }, []);
+    })  */
+  }, [dispatch]);
 
 
   return (

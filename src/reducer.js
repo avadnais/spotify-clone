@@ -40,20 +40,10 @@ const reducer = (state, action) => {
                 ...state,
                 discover_weekly: action.discover_weekly
             }
-        case 'SET_ITEM':
+        case 'SET_SELECTED_TRACK':
             return {
                 ...state,
-                item: action.item
-            }
-        case 'SET_DEVICE_ID':
-            return {
-                ...state,
-                id: action.id
-            }
-        case 'SET_CURRENT_TRACK_ID':
-            return {
-                ...state,
-                current_track_id: action.current_track_id
+                track: action.track
             }
         case 'SET_PLAYING':
             return {
@@ -64,11 +54,6 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 volume: action.volume
-            }
-        case 'SET_DEVICE_ID':
-            return {
-                ...state,
-                device_id: action.device_id
             }
         default: 
             return state;

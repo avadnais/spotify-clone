@@ -4,9 +4,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import {Avatar} from "@mui/material";
 import {useDataLayerValue} from './DataLayer';
 
-function Header({spotify}) {
+function Header() {
 
-    const [{ user, }, dispatch] = useDataLayerValue();
+    const [{ user }] = useDataLayerValue();
 
     return (
         <div className='header'>

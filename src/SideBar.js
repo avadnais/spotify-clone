@@ -1,10 +1,10 @@
-import React, {useCallback} from "react";
+import React from "react";
 import "./SideBar.css";
 import SideBarOption from "./SideBarOption";
 import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
-import { DataLayerContext, useDataLayerValue } from "./DataLayer";
+import { useDataLayerValue } from "./DataLayer";
 
 function SideBar({spotify}) {
   const [{ playlists }, dispatch] = useDataLayerValue();

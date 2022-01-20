@@ -11,29 +11,26 @@ import { VolumeDown } from "@mui/icons-material";
 import { useDataLayerValue } from "./DataLayer";
 
 function Footer({ spotify }) {
-  const [{ volume, item, playing }, dispatch] =
-    useDataLayerValue();
+  const [{ volume, track, playing }, dispatch] = useDataLayerValue();
   useEffect(() => {
+    console.log(`%cFOOTER RENDERED`, `color: yellow`);
     spotify.getMyCurrentPlaybackState().then((response) => {
       dispatch({
-        type: "SET_ITEM",
-        action: response.item,
+        type: "SET_SELECTED_TRACK",
+        track: response.item.track,
       });
-
-      dispatch({
-        type: "SET_PLAYING",
-        action: response.is_playing,
-      });
+      if (!playing) {
+        dispatch({
+          type: "SET_PLAYING",
+          playing: true,
+        });
+      }
     });
+  }, [spotify, dispatch]);
 
-    spotify.getMyCurrentPlayingTrack().then((response) => {
-      console.log("Currently playing 🎵", response.item.id);
-      dispatch({
-        type: "SET_CURRENT_TRACK_ID",
-        current_track_id: response.item.id,
-      });
-    });
-  }, [spotify]);
+  useEffect(() => {
+    console.log(`%cFOOTER RENDERED`, `color: cyan`);
+  });
 
   const handleChange = (e) => {
     let _volume = e.target.childNodes[0].value; //MUI Slider location of value
@@ -61,71 +58,74 @@ function Footer({ spotify }) {
   };
 
   const handleSkipNext = () => {
-    spotify.skipToNext();
-    spotify.getMyCurrentPlayingTrack().then((response) => {
-      dispatch({
-        type: "SET_ITEM",
-        item: response.item,
-      });
-      dispatch({
-        type: "SET_PLAYING",
-        playing: true,
+    spotify.skipToNext().then(() => {
+      spotify.getMyCurrentPlaybackState().then((response) => {
+        dispatch({
+          type: "SET_SELECTED_TRACK",
+          track: response.item.track,
+        });
+        dispatch({
+          type: "SET_PLAYING",
+          playing: true,
+        });
       });
     });
   };
 
   return (
     <div className="footer">
-      <div className="footer_left">
-        <img
-          src={item?.album.images[0].url}
-          alt={item?.name}
-          className="footer_albumLogo"
-        />
-        {item ? (
-          <div className="footer_songInfo">
-            <h4>{item.name}</h4>
-            <p>{item.artists.map((artist) => artist.name).join(", ")}</p>
-          </div>
-        ) : (
-          <div className="footer_songInfo">
-            <h4>No song selected</h4>
-          </div>
-        )}
-      </div>
-
-      <div className="footer_center">
-        <div className="footer_icons">
-          <ShuffleIcon className="footer_green" />
-          <SkipPreviousIcon className="footer_icon" />
-          <PlayCircleOutlinedIcon
-            fontSize="large"
-            className="footer_icon"
-            onClick={handlePlayPause}
+      <div className="footer">
+        <div className="footer_left">
+          <img
+            src={track?.album.images[0].url}
+            alt={track?.name || "none"}
+            className="footer_albumLogo"
           />
-          <SkipNextIcon className="footer_icon" onClick={handleSkipNext} />
-          <RepeatIcon className="footer_green" />
+          {track ? (
+            <div className="footer_songInfo">
+              <h4>{track.name}</h4>
+              <p>{track.artists.map((artist) => artist.name).join(", ")}</p>
+            </div>
+          ) : (
+            <div className="footer_songInfo">
+              <h4>No song selected</h4>
+            </div>
+          )}
         </div>
-      </div>
 
-      <div className="footer_right">
-        <Grid container spacing={2}>
-          <Grid item>
-            <PlaylistPlayIcon />
-          </Grid>
-          <Grid item>
-            <VolumeDown />
-          </Grid>
-          <Grid item xs>
-            <Slider
-              min={0}
-              max={100}
-              value={volume}
-              step={1}
-              onChangeCommitted={handleChange}
+        <div className="footer_center">
+          <div className="footer_icons">
+            <ShuffleIcon className="footer_green" />
+            <SkipPreviousIcon className="footer_icon" />
+            <PlayCircleOutlinedIcon
+              fontSize="large"
+              className="footer_icon"
+              onClick={handlePlayPause}
             />
+            <SkipNextIcon className="footer_icon" onClick={handleSkipNext} />
+            <RepeatIcon className="footer_green" />
+          </div>
+        </div>
+
+        <div className="footer_right">
+          <Grid container spacing={2}>
+            <Grid item>
+              <PlaylistPlayIcon />
+            </Grid>
+            <Grid item>
+              <VolumeDown />
+            </Grid>
+            <Grid item xs>
+              <Slider
+                min={0}
+                max={100}
+                value={volume}
+                step={1}
+                onChangeCommitted={handleChange}
+              />
+            </Grid>
           </Grid>
-        </Grid>
+        </div>
       </div>
     </div>
   );
