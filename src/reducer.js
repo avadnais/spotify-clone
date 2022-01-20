@@ -2,10 +2,9 @@ export const initialState = {
     user: null,
     playlists: [],
     discover_weekly: null,
-    // set to null after finished developing
-    //token: 'BQARbFSgF5T-dwPUIuD0F6aSWA2S5wNX5LH99RpGdJWk4Y4zh0JvjlFN2moeh-zQKtNqQNTjmGqDMv1xAiIW4nA8sXkDQGOSds9mFIuzFnaTX413w5wi36DC2mdoroJqg0n6apXKWp9a76dxbvYh7x_pDnMuFG4tsg'
     token: null,
-    spotify: null
+    spotify: null,
+    loading: true
 }
 
 // LISTENER

@@ -1,4 +1,3 @@
-import { CREDENTIALS } from "./Credentials";
 
 /* 
 step 1: click login with spotify link
@@ -8,7 +7,7 @@ step 3: redirect back to localhost:3000/
 
 const authEndpoint = "http://accounts.spotify.com/authorize";
 const redirectURI = "http://localhost:3000/";
-const clientId = CREDENTIALS.clientId;
+const clientId = process.env.REACT_APP_CLIENT_ID
 const scopes = [
   "user-read-playback-state",
   "user-modify-playback-state",

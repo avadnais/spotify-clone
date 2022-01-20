@@ -6,7 +6,6 @@ import SpotifyWebApi from "spotify-web-api-js";
 import { Dashboard } from "./Dashboard";
 import { useDataLayerValue } from "./DataLayer";
 
-
 const spotify = new SpotifyWebApi();
 
 export const App = () => {
@@ -46,13 +45,6 @@ export const App = () => {
         'is_active': 'true'
       })
     }) 
-
-    spotify.getUserPlaylists().then((playlists) => {
-      dispatch({
-        type: "SET_PLAYLISTS",
-        playlists: playlists,
-      });
-    });
 
       spotify.getMyCurrentPlayingTrack().then((response) => {
       console.log("Currently playing 🎵", response.item.id)
