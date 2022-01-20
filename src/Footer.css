@@ -15,7 +15,8 @@
     flex: 0.3;
     display: flex;
     align-items: center;
-    width: 28rem;
+    min-width: 7rem;
+    max-width: 18rem;
 }
 
 .footer_albumLogo {
@@ -38,9 +39,11 @@
 }
 
 .footer_center {
+    display: flex;
+    justify-content: space-between;
     flex: 0.4;
     max-width: 25rem;
-
+    align-items: center;
 }
 
 .footer_icons {
@@ -48,6 +51,7 @@
     padding: 0 3rem;
     align-items: center;
     justify-content: space-between;
+    min-width: 50%;
     max-width: 100%;
 }
 

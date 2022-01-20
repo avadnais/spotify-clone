@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./SongRow.css";
 import { useDataLayerValue } from "./DataLayer";
-import GraphicEqIcon from "@mui/icons-material/GraphicEq";
 
 function SongRow({ item, playSong, i }) {
   const _track = item.track;

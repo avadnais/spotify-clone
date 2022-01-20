@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Body.css";
 import { useDataLayerValue } from "./DataLayer";
 import Header from "./Header";
@@ -10,18 +10,23 @@ import SongRow from "./SongRow";
 function Body({ spotify }) {
   const [{ selected_playlist, playing }, dispatch] = useDataLayerValue();
 
-  const playPlaylist = (id) => {
+  const playPlaylist = () => {
     spotify
       .play({
-        context_uri: `spotify:playlist:${id}`,
+        context_uri: `spotify:playlist:${selected_playlist.id}`,
       })
-      .then(
-        spotify.getMyCurrentPlaybackState().then((reponse) => {
+      .then(() => {
           dispatch({
-            type: "SET_CURRENT_PLAYBACK_STATE",
-            current_playback_state: reponse,
-          });
-        })
+            type: "SET_CURRENT_SELECTED_TRACK",
+            track: selected_playlist.tracks[0]
+          })
+          if (!playing) {
+            dispatch({
+              type: "SET_PLAYING",
+              playing: true,
+            });
+          }
+        }
       );
   };
 
@@ -45,6 +50,24 @@ function Body({ spotify }) {
       });
   };
 
+  // Fetch user playlists then set current playlist to first playlist
+  useEffect(() => {
+    console.log(`%cBODY RENDERED in useEffect []`, `color: purple`)
+    const fetchPlaylist = async () => await spotify.getUserPlaylists().then((playlists) => {
+      dispatch({
+        type: "SET_PLAYLISTS",
+        playlists: playlists,
+      });
+      spotify.getPlaylist(playlists.items[0].id).then((response) => {
+      dispatch({
+        type: "SET_SELECTED_PLAYLIST",
+        selected_playlist: response,
+      });
+    })
+  })
+    fetchPlaylist()
+  }, [spotify, dispatch])
+
   return (
     <div className="body">
       <Header />
@@ -63,7 +86,7 @@ function Body({ spotify }) {
 
       <div className="body_songs">
         <div className="body_icons">
-          <PlayCircleFilledIcon className="body_shuffle body_green" />
+          <PlayCircleFilledIcon className="body_shuffle body_green" onClick={playPlaylist}/>
           <FavoriteIcon className="body_green" fontSize="large" />
           <MoreHorizIcon />
         </div>

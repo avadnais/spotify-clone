@@ -14,7 +14,7 @@ function Footer({ spotify }) {
   const [{ volume, track, playing }, dispatch] = useDataLayerValue();
   useEffect(() => {
     console.log(`%cFOOTER RENDERED`, `color: yellow`);
-    spotify.getMyCurrentPlaybackState().then((response) => {
+    const getStartingState = async() => await spotify.getMyCurrentPlaybackState().then((response) => {
       dispatch({
         type: "SET_SELECTED_TRACK",
         track: response.item.track,
@@ -26,6 +26,7 @@ function Footer({ spotify }) {
         });
       }
     });
+    getStartingState();
   }, [spotify, dispatch]);
 
   useEffect(() => {
@@ -78,17 +79,13 @@ function Footer({ spotify }) {
         <div className="footer_left">
           <img
             src={track?.album.images[0].url}
-            alt={track?.name || "none"}
+            alt={track?.name}
             className="footer_albumLogo"
           />
-          {track ? (
+          {track && (
             <div className="footer_songInfo">
               <h4>{track.name}</h4>
               <p>{track.artists.map((artist) => artist.name).join(", ")}</p>
-            </div>
-          ) : (
-            <div className="footer_songInfo">
-              <h4>No song selected</h4>
             </div>
           )}
         </div>

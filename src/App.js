@@ -33,7 +33,7 @@ export const App = () => {
     });
 
     //set first device in list to active and get volume
-/*     spotify.getMyDevices().then((r) => {
+     spotify.getMyDevices().then((r) => {
       dispatch({
         type: 'SET_VOLUME',
         volume: r.devices[0].volume_percent
@@ -45,7 +45,7 @@ export const App = () => {
       spotify.transferMyPlayback([r.devices[0].id], {
         'is_active': 'true'
       })
-    }) */
+    }) 
 
     spotify.getUserPlaylists().then((playlists) => {
       dispatch({
@@ -54,20 +54,18 @@ export const App = () => {
       });
     });
 
-    spotify.getPlaylist("37i9dQZEVXcTqK7wcVg7Co").then((response) => {
-      dispatch({
-        type: "SET_DISCOVER_WEEKLY",
-        discover_weekly: response,
-      });
-    });
-
-/*      spotify.getMyCurrentPlayingTrack().then((response) => {
+      spotify.getMyCurrentPlayingTrack().then((response) => {
       console.log("Currently playing 🎵", response.item.id)
       dispatch({
-        type: 'SET_CURRENT_TRACK',
+        type: 'SET_SELECTED_TRACK',
         current_track: response.item.id
       })
-    })  */
+      console.log(response)
+      dispatch({
+        type: 'SET_PLAYING',
+        playing: response.is_playing
+      })
+    })  
   }, [dispatch]);
 
 
