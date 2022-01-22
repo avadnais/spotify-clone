@@ -8,7 +8,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import SongRow from "./SongRow";
 
 function Body({ spotify }) {
-  const [{ selected_playlist, playing, }, dispatch] = useDataLayerValue();
+  const [{ selected_playlist, playing }, dispatch] = useDataLayerValue();
 
   const playPlaylist = () => {
     spotify
@@ -16,10 +16,14 @@ function Body({ spotify }) {
         context_uri: `spotify:playlist:${selected_playlist.id}`,
       })
       .then(() => {
-        dispatch({
-          type: "SET_SELECTED_TRACK",
-          track: selected_playlist.tracks.items[0].track,
-        });
+        setTimeout(() => {
+          spotify.getMyCurrentPlaybackState().then((r) => {
+            dispatch({
+              type: "SET_SELECTED_TRACK",
+              track: r.item
+            });
+          });
+        }, 250);
         if (!playing) {
           dispatch({
             type: "SET_PLAYING",
@@ -27,13 +31,9 @@ function Body({ spotify }) {
           });
         }
         dispatch({
-          type: 'SET_PLAY_CONTEXT',
-          play_context: 'playlist'
-        })
-        dispatch({
-          type: 'SET_INDEX',
-          index: 0
-        })
+          type: "SET_INDEX",
+          index: 0,
+        });
       });
   };
 
@@ -48,10 +48,6 @@ function Body({ spotify }) {
         playing: true,
       });
     }
-    dispatch({
-      type: 'SET_PLAY_CONTEXT',
-      play_context: 'song'
-    })
     spotify
       .play({
         uris: [`spotify:track:${item.track.id}`],
@@ -79,7 +75,6 @@ function Body({ spotify }) {
       });
 
     fetchPlaylist();
-
   }, [spotify, dispatch]);
 
   return (

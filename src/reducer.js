@@ -5,7 +5,8 @@ export const initialState = {
     token: null,
     spotify: null,
     loading: true,
-    index: null
+    index: null,
+    volume: null
 }
 
 // LISTENER
@@ -64,6 +65,16 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 index: action.index
+            }
+        case 'SET_SHUFFLE_STATE':
+            return {
+                ...state,
+                shuffle: action.shuffle
+            }
+        case 'SET_REPEAT_STATE':
+            return {
+                ...state,
+                repeat: action.repeat
             }
         default: 
             return state;

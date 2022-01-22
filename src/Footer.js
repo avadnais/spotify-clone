@@ -8,11 +8,12 @@ import RepeatIcon from "@mui/icons-material/Repeat";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import { Grid, Slider } from "@mui/material";
 import PauseCircleOutlineIcon from "@mui/icons-material/PauseCircleOutline";
+import RepeatOneIcon from '@mui/icons-material/RepeatOne';
 import { Pause, VolumeDown } from "@mui/icons-material";
 import { useDataLayerValue } from "./DataLayer";
 
 function Footer({ spotify }) {
-  const [{ volume, track, playing, selected_playlist, index }, dispatch] =
+  const [{ volume, track, playing, selected_playlist, index, shuffle, repeat }, dispatch] =
     useDataLayerValue();
   useEffect(() => {
     let mounted = true;
@@ -30,6 +31,18 @@ function Footer({ spotify }) {
             type: "SET_PLAYING",
             playing: response.item.is_playing,
           });
+          dispatch({
+            type: "SET_VOLUME",
+            volume: parseInt(response.device.volume_percent),
+          });
+          dispatch({
+            type: "SET_SHUFFLE_STATE",
+            shuffle: response.shuffle_state
+          })
+          dispatch({
+            type: "SET_REPEAT_STATE",
+            repeat: response.repeat_state
+          })
         } catch (e) {
           console.log(e);
         }
@@ -39,14 +52,19 @@ function Footer({ spotify }) {
     console.log(`%cTRACK:${track}`, `color: yellow`);
   }, [spotify, dispatch]);
 
-  const handleChange = (e) => {
-    let _volume = e.target.childNodes[0].value; //MUI Slider location of value
-    dispatch({
-      type: "SET_VOLUME",
-      volume: _volume,
-    });
-    spotify.setVolume(_volume);
-  };
+  let timer;
+  const handleChange = (e, val) => {
+    //MUI Slider location of value
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      dispatch({
+            type: "SET_VOLUME",
+            volume: parseInt(val),
+      });
+      spotify.setVolume(val);
+      }, 5)
+
+    };
 
   const handlePlayPause = () => {
     if (playing) {
@@ -66,37 +84,66 @@ function Footer({ spotify }) {
 
   const handleSkipNext = () => {
     // can't skip on last song of playlist
-    if (index === selected_playlist.tracks.items.length - 1) {
-      console.log("end of playlist reached");
-    } else {
-      spotify.skipToNext();
-      dispatch({
-        type: "SET_SELECTED_TRACK",
-        track: selected_playlist.tracks.items[index + 1].track,
-      });
-      dispatch({
-        type: "SET_INDEX",
-        index: index + 1,
-      });
-    }
+    // Set timeout to wait for skip to next to update before calling to get the state
+    
+    spotify.skipToNext().then(() => {
+      setTimeout(() => {
+        spotify.getMyCurrentPlaybackState().then((r) => {
+          console.log(r);
+          dispatch({
+            type: "SET_SELECTED_TRACK",
+            track: r.item,
+          });
+          dispatch({
+            type: 'SET_REPEAT_STATE',
+            repeat: r.repeat_state
+          })
+        });
+      }, 250);
+    });
   };
 
   const handleSkipBack = () => {
     // can't skip back on first song of playlist
-    if (index === 0) {
-      console.log("can't skip back on first song of playlist");
-    } else {
-      spotify.skipToPrevious();
-      dispatch({
-        type: "SET_SELECTED_TRACK",
-        track: selected_playlist.tracks.items[index - 1].track,
-      });
-      dispatch({
-        type: "SET_INDEX",
-        index: index - 1,
-      });
-    }
+    spotify.skipToPrevious().then(() => {
+      setTimeout(() => {
+        spotify.getMyCurrentPlaybackState().then((r) => {
+          console.log(r);
+          dispatch({
+            type: "SET_SELECTED_TRACK",
+            track: r.item,
+          });
+          dispatch({
+            type: 'SET_REPEAT_STATE',
+            repeat: r.repeat_state
+          })
+        });
+      }, 250);
+    });
   };
+
+  const handleShuffle = () => {
+    spotify.setShuffle(!shuffle);
+    dispatch({
+      type: 'SET_SHUFFLE_STATE',
+      shuffle: !shuffle 
+    })
+  };
+
+  const handleRepeat = () => {
+    let nextStatus;
+    //console.log(`repeat: `, repeat)
+
+    if (repeat === 'off') nextStatus = 'context'
+    else if (repeat === 'context') nextStatus = 'track'
+    else if (repeat === 'track') nextStatus = 'off'
+    spotify.setRepeat(nextStatus)
+    dispatch({
+      type: 'SET_REPEAT_STATE',
+      repeat: nextStatus
+    })
+    
+  }
 
   return (
     <div className="footer">
@@ -117,8 +164,11 @@ function Footer({ spotify }) {
 
         <div className="footer_center">
           <div className="footer_icons">
-            <ShuffleIcon className="footer_green" />
-            <SkipPreviousIcon className="footer_icon" onClick={handleSkipBack} />
+            <ShuffleIcon className={shuffle && "footer_green"} onClick={handleShuffle} />
+            <SkipPreviousIcon
+              className="footer_icon"
+              onClick={handleSkipBack}
+            />
             {playing ? (
               <PauseCircleOutlineIcon
                 fontSize="large"
@@ -132,8 +182,12 @@ function Footer({ spotify }) {
                 onClick={handlePlayPause}
               />
             )}
+            
             <SkipNextIcon className="footer_icon" onClick={handleSkipNext} />
-            <RepeatIcon className="footer_green" />
+            {repeat === 'off' && <RepeatIcon className="footer_icon" onClick={handleRepeat} />}
+            {repeat === 'context' && <RepeatIcon className="footer_green" onClick={handleRepeat} />}
+            {repeat === 'track' && <RepeatOneIcon className="footer_green" onClick={handleRepeat} />}
+            
           </div>
         </div>
 
@@ -151,7 +205,7 @@ function Footer({ spotify }) {
                 max={100}
                 value={volume}
                 step={1}
-                onChangeCommitted={handleChange}
+                onChange={handleChange}
               />
             </Grid>
           </Grid>
