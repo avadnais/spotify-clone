@@ -7,31 +7,37 @@ import ShuffleIcon from "@mui/icons-material/Shuffle";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import { Grid, Slider } from "@mui/material";
-import { VolumeDown } from "@mui/icons-material";
+import PauseCircleOutlineIcon from "@mui/icons-material/PauseCircleOutline";
+import { Pause, VolumeDown } from "@mui/icons-material";
 import { useDataLayerValue } from "./DataLayer";
 
 function Footer({ spotify }) {
-  const [{ volume, track, playing }, dispatch] = useDataLayerValue();
+  const [{ volume, track, playing, selected_playlist, index }, dispatch] =
+    useDataLayerValue();
   useEffect(() => {
+    let mounted = true;
     console.log(`%cFOOTER RENDERED`, `color: yellow`);
-    const getStartingState = async() => await spotify.getMyCurrentPlaybackState().then((response) => {
-      dispatch({
-        type: "SET_SELECTED_TRACK",
-        track: response.item.track,
+    const getStartingState = async () =>
+      await spotify.getMyCurrentPlaybackState().then((response) => {
+        try {
+          console.log(`%cgetmyCurrentPlaybackState():`, `color:yellow`);
+          console.log(response);
+          dispatch({
+            type: "SET_SELECTED_TRACK",
+            track: response.item,
+          });
+          dispatch({
+            type: "SET_PLAYING",
+            playing: response.item.is_playing,
+          });
+        } catch (e) {
+          console.log(e);
+        }
       });
-      if (!playing) {
-        dispatch({
-          type: "SET_PLAYING",
-          playing: true,
-        });
-      }
-    });
-    getStartingState();
-  }, [spotify, dispatch]);
 
-  useEffect(() => {
-    console.log(`%cFOOTER RENDERED`, `color: cyan`);
-  });
+    getStartingState();
+    console.log(`%cTRACK:${track}`, `color: yellow`);
+  }, [spotify, dispatch]);
 
   const handleChange = (e) => {
     let _volume = e.target.childNodes[0].value; //MUI Slider location of value
@@ -59,18 +65,37 @@ function Footer({ spotify }) {
   };
 
   const handleSkipNext = () => {
-    spotify.skipToNext().then(() => {
-      spotify.getMyCurrentPlaybackState().then((response) => {
-        dispatch({
-          type: "SET_SELECTED_TRACK",
-          track: response.item.track,
-        });
-        dispatch({
-          type: "SET_PLAYING",
-          playing: true,
-        });
+    // can't skip on last song of playlist
+    if (index === selected_playlist.tracks.items.length - 1) {
+      console.log("end of playlist reached");
+    } else {
+      spotify.skipToNext();
+      dispatch({
+        type: "SET_SELECTED_TRACK",
+        track: selected_playlist.tracks.items[index + 1].track,
       });
-    });
+      dispatch({
+        type: "SET_INDEX",
+        index: index + 1,
+      });
+    }
+  };
+
+  const handleSkipBack = () => {
+    // can't skip back on first song of playlist
+    if (index === 0) {
+      console.log("can't skip back on first song of playlist");
+    } else {
+      spotify.skipToPrevious();
+      dispatch({
+        type: "SET_SELECTED_TRACK",
+        track: selected_playlist.tracks.items[index - 1].track,
+      });
+      dispatch({
+        type: "SET_INDEX",
+        index: index - 1,
+      });
+    }
   };
 
   return (
@@ -78,14 +103,14 @@ function Footer({ spotify }) {
       <div className="footer">
         <div className="footer_left">
           <img
-            src={track?.album.images[0].url}
+            src={track?.album?.images[0]?.url}
             alt={track?.name}
             className="footer_albumLogo"
           />
           {track && (
             <div className="footer_songInfo">
               <h4>{track.name}</h4>
-              <p>{track.artists.map((artist) => artist.name).join(", ")}</p>
+              <p>{track?.artists?.map((artist) => artist.name).join(", ")}</p>
             </div>
           )}
         </div>
@@ -93,12 +118,20 @@ function Footer({ spotify }) {
         <div className="footer_center">
           <div className="footer_icons">
             <ShuffleIcon className="footer_green" />
-            <SkipPreviousIcon className="footer_icon" />
-            <PlayCircleOutlinedIcon
-              fontSize="large"
-              className="footer_icon"
-              onClick={handlePlayPause}
-            />
+            <SkipPreviousIcon className="footer_icon" onClick={handleSkipBack} />
+            {playing ? (
+              <PauseCircleOutlineIcon
+                fontSize="large"
+                className="footer_icon"
+                onClick={handlePlayPause}
+              />
+            ) : (
+              <PlayCircleOutlinedIcon
+                fontSize="large"
+                className="footer_icon"
+                onClick={handlePlayPause}
+              />
+            )}
             <SkipNextIcon className="footer_icon" onClick={handleSkipNext} />
             <RepeatIcon className="footer_green" />
           </div>

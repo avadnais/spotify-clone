@@ -4,7 +4,8 @@ export const initialState = {
     discover_weekly: null,
     token: null,
     spotify: null,
-    loading: true
+    loading: true,
+    index: null
 }
 
 // LISTENER
@@ -53,6 +54,16 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 volume: action.volume
+            }
+        case 'SET_PLAY_CONTEXT':
+            return {
+                ...state,
+                play_context: action.play_context
+            }
+        case 'SET_INDEX':
+            return {
+                ...state,
+                index: action.index
             }
         default: 
             return state;

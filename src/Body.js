@@ -8,7 +8,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import SongRow from "./SongRow";
 
 function Body({ spotify }) {
-  const [{ selected_playlist, playing }, dispatch] = useDataLayerValue();
+  const [{ selected_playlist, playing, }, dispatch] = useDataLayerValue();
 
   const playPlaylist = () => {
     spotify
@@ -16,18 +16,25 @@ function Body({ spotify }) {
         context_uri: `spotify:playlist:${selected_playlist.id}`,
       })
       .then(() => {
+        dispatch({
+          type: "SET_SELECTED_TRACK",
+          track: selected_playlist.tracks.items[0].track,
+        });
+        if (!playing) {
           dispatch({
-            type: "SET_CURRENT_SELECTED_TRACK",
-            track: selected_playlist.tracks[0]
-          })
-          if (!playing) {
-            dispatch({
-              type: "SET_PLAYING",
-              playing: true,
-            });
-          }
+            type: "SET_PLAYING",
+            playing: true,
+          });
         }
-      );
+        dispatch({
+          type: 'SET_PLAY_CONTEXT',
+          play_context: 'playlist'
+        })
+        dispatch({
+          type: 'SET_INDEX',
+          index: 0
+        })
+      });
   };
 
   const playSong = (item) => {
@@ -41,6 +48,10 @@ function Body({ spotify }) {
         playing: true,
       });
     }
+    dispatch({
+      type: 'SET_PLAY_CONTEXT',
+      play_context: 'song'
+    })
     spotify
       .play({
         uris: [`spotify:track:${item.track.id}`],
@@ -52,21 +63,24 @@ function Body({ spotify }) {
 
   // Fetch user playlists then set current playlist to first playlist
   useEffect(() => {
-    console.log(`%cBODY RENDERED in useEffect []`, `color: purple`)
-    const fetchPlaylist = async () => await spotify.getUserPlaylists().then((playlists) => {
-      dispatch({
-        type: "SET_PLAYLISTS",
-        playlists: playlists,
+    console.log(`%cBODY RENDERED in useEffect []`, `color: purple`);
+    const fetchPlaylist = async () =>
+      await spotify.getUserPlaylists().then((playlists) => {
+        dispatch({
+          type: "SET_PLAYLISTS",
+          playlists: playlists,
+        });
+        spotify.getPlaylist(playlists.items[0].id).then((response) => {
+          dispatch({
+            type: "SET_SELECTED_PLAYLIST",
+            selected_playlist: response,
+          });
+        });
       });
-      spotify.getPlaylist(playlists.items[0].id).then((response) => {
-      dispatch({
-        type: "SET_SELECTED_PLAYLIST",
-        selected_playlist: response,
-      });
-    })
-  })
-    fetchPlaylist()
-  }, [spotify, dispatch])
+
+    fetchPlaylist();
+
+  }, [spotify, dispatch]);
 
   return (
     <div className="body">
@@ -86,7 +100,10 @@ function Body({ spotify }) {
 
       <div className="body_songs">
         <div className="body_icons">
-          <PlayCircleFilledIcon className="body_shuffle body_green" onClick={playPlaylist}/>
+          <PlayCircleFilledIcon
+            className="body_shuffle body_green"
+            onClick={playPlaylist}
+          />
           <FavoriteIcon className="body_green" fontSize="large" />
           <MoreHorizIcon />
         </div>

@@ -10,19 +10,18 @@ const spotify = new SpotifyWebApi();
 
 export const App = () => {
   const [{ token }, dispatch] = useDataLayerValue();
-  
 
   // run code based on given condition (blank second param = run only once)
   useEffect(() => {
     const _token = getTokenFromURL().access_token;
     window.history.pushState({}, null, "/"); //clear the url after the hash
 
-    if(_token) spotify.setAccessToken(_token);
+    if (_token) spotify.setAccessToken(_token);
 
     dispatch({
-      type: 'SET_TOKEN',
-      token: _token
-    })
+      type: "SET_TOKEN",
+      token: _token,
+    });
 
     spotify.getMe().then((user) => {
       dispatch({
@@ -32,38 +31,40 @@ export const App = () => {
     });
 
     //set first device in list to active and get volume
-     spotify.getMyDevices().then((r) => {
+ /*    const fetchDevices = async () => {
+      await spotify.getMyDevices().then((r) => {
+        dispatch({
+          type: "SET_VOLUME",
+          volume: r.devices[0].volume_percent,
+        });
+        dispatch({
+          type: "SET_DEVICE",
+          device_id: r.devices[0].id,
+        });
+        spotify.transferMyPlayback([r.devices[0].id], {
+          is_active: "true",
+        });
+      });
+    }; */
+/* 
+    console.log(`%cABOUT TO REQUEST CURRENT PLAYING TRACK IN APP.JS`, `color: red; font-weight: bold`)
+    spotify.getMyCurrentPlayingTrack().then((response) => {
+      console.log("Currently playing 🎵", response.item.id);
       dispatch({
-        type: 'SET_VOLUME',
-        volume: r.devices[0].volume_percent
-      })
+        type: "SET_SELECTED_TRACK",
+        current_track: response.id,
+      });
+      console.log(response);
       dispatch({
-        type: 'SET_DEVICE',
-        device_id: r.devices[0].id
-      })
-      spotify.transferMyPlayback([r.devices[0].id], {
-        'is_active': 'true'
-      })
-    }) 
-
-      spotify.getMyCurrentPlayingTrack().then((response) => {
-      console.log("Currently playing 🎵", response.item.id)
-      dispatch({
-        type: 'SET_SELECTED_TRACK',
-        current_track: response.item.id
-      })
-      console.log(response)
-      dispatch({
-        type: 'SET_PLAYING',
-        playing: response.is_playing
-      })
-    })  
+        type: "SET_PLAYING",
+        playing: response.is_playing,
+      });
+    }); */
   }, [dispatch]);
-
 
   return (
     <div className="app">
-      {token ? <Dashboard spotify={spotify}/> : <Login />}
+      {token ? <Dashboard spotify={spotify} /> : <Login />}
     </div>
   );
 };

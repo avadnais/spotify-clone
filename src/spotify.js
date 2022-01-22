@@ -6,7 +6,7 @@ step 3: redirect back to localhost:3000/
 */
 
 const authEndpoint = "http://accounts.spotify.com/authorize";
-const redirectURI = "http://avadnais.github.io/spotify-clone";
+const redirectURI = "http://localhost:3000/";
 const clientId = process.env.REACT_APP_CLIENT_ID
 const scopes = [
   "user-read-playback-state",

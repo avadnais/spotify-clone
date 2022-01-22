@@ -5,6 +5,9 @@ import Body from "./Body";
 import Footer from "./Footer";
 
 export const Dashboard = ({spotify}) => {
+
+    
+
     return (
         <div className="dashboard">
             <div className="dashboard_body">
