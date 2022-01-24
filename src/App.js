@@ -13,15 +13,27 @@ export const App = () => {
 
   // run code based on given condition (blank second param = run only once)
   useEffect(() => {
-    const _token = getTokenFromURL().access_token;
-    window.history.pushState({}, null, "/"); //clear the url after the hash
+    const _token = window.localStorage.getItem("token")
+    if (!_token) {
+      _token = getTokenFromURL().access_token;
+      window.history.pushState({}, null, "/"); //clear the url after the hash
 
-    if (_token) spotify.setAccessToken(_token);
+      if (_token) {
+        spotify.setAccessToken(_token);
+        window.localStorage.setItem("token", _token);
+        dispatch({
+          type: "SET_TOKEN",
+          token: _token,
+        });
+      }
+    }
 
-    dispatch({
-      type: "SET_TOKEN",
-      token: _token,
-    });
+      
+      spotify.setAccessToken(_token);
+      dispatch({
+        type: "SET_TOKEN",
+        token: _token,
+      });
 
     spotify.getMe().then((user) => {
       dispatch({
@@ -31,7 +43,7 @@ export const App = () => {
     });
 
     //set first device in list to active and get volume
- /*    const fetchDevices = async () => {
+    const fetchDevices = async () => {
       await spotify.getMyDevices().then((r) => {
         dispatch({
           type: "SET_VOLUME",
@@ -45,21 +57,7 @@ export const App = () => {
           is_active: "true",
         });
       });
-    }; */
-/* 
-    console.log(`%cABOUT TO REQUEST CURRENT PLAYING TRACK IN APP.JS`, `color: red; font-weight: bold`)
-    spotify.getMyCurrentPlayingTrack().then((response) => {
-      console.log("Currently playing 🎵", response.item.id);
-      dispatch({
-        type: "SET_SELECTED_TRACK",
-        current_track: response.id,
-      });
-      console.log(response);
-      dispatch({
-        type: "SET_PLAYING",
-        playing: response.is_playing,
-      });
-    }); */
+    };
   }, [dispatch]);
 
   return (

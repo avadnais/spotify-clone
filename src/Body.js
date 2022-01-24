@@ -79,7 +79,7 @@ function Body({ spotify }) {
 
   return (
     <div className="body">
-      <Header />
+      <Header spotify={spotify}/>
       <div className="body_info">
         <img
           className="album_cover"
