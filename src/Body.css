@@ -64,3 +64,12 @@
     margin: 1.5rem -2rem;
 }
 
+.body_infoText .numLikes {
+    margin-top: 1rem;
+    display: flex;
+}
+
+.likes {
+    margin-right: .5rem;
+}
+

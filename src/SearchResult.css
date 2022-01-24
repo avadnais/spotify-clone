@@ -1,9 +1,0 @@
-.searchResult {
-    display: flex;
-    flex-direction: row;
-}
-
-.searchResult img {
-    width: 2rem;
-    height: 2rem;
-}

@@ -30,7 +30,7 @@ function SongRow({ item, playSong, i }) {
         )}
       </div>
 
-      <img className="songRow_album" src={_track.album.images[0].url} alt="" />
+      <img className="songRow_album" src={_track?.album?.images[0]?.url} alt="" />
       <div className="songRow_info">
         <h1>{_track.name}</h1>
         <p>

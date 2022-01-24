@@ -37,6 +37,19 @@
     align-items: center;
 }
 
+.header_right_text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.header_right_text p {
+    font-size: .75rem;
+}
+.header_right_text p:hover {
+    cursor: pointer;
+}
+
 .header_right h4 {
     margin-left: .75rem;
 }

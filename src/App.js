@@ -13,7 +13,7 @@ export const App = () => {
 
   // run code based on given condition (blank second param = run only once)
   useEffect(() => {
-    const _token = window.localStorage.getItem("token")
+    let _token = window.localStorage.getItem("token")
     if (!_token) {
       _token = getTokenFromURL().access_token;
       window.history.pushState({}, null, "/"); //clear the url after the hash
@@ -59,6 +59,7 @@ export const App = () => {
       });
     };
   }, [dispatch]);
+  
 
   return (
     <div className="app">

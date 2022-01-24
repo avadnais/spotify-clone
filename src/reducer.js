@@ -76,6 +76,11 @@ const reducer = (state, action) => {
                 ...state,
                 repeat: action.repeat
             }
+        case 'SET_SEARCH_RESULTS':
+            return {
+                ...state,
+                search_results: action.search_results
+            }
         default: 
             return state;
     }
