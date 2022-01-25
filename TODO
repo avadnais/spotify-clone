@@ -1,0 +1,11 @@
+
+
+- LOGIC FOR NO ACTIVE SESSION WHEN PLAY BUTTON CLICKED 
+    - CHECK RESPONSE
+
+
+- going to have to dispatch playlists that are editable in order to properly render
+playlists that you can add songs to
+
+
+
