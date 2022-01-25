@@ -119,7 +119,7 @@ function Body({ spotify }) {
               <SearchResultsTrack i={i} track={item} play={play} />
             ))}
           </div>
-          {/*           <h2>Albums</h2>
+          <h2>Albums</h2>
           <hr />
           <div className="searchResults_albums">
             {search_results?.albums?.items.map((item) => (
@@ -132,7 +132,7 @@ function Body({ spotify }) {
             {search_results?.artists?.items.map((item) => (
               <p>{item.name}</p>
             ))}
-          </div> */}
+          </div>
           <h2>Playlists</h2>
           <hr />
           <div className="searchResults_playlists">

@@ -87,3 +87,7 @@
     box-shadow: 24;
     padding: 4rem;
 }
+
+.modalBox h3 {
+    margin-bottom: 1rem;
+}

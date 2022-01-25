@@ -22,7 +22,7 @@ function SearchResultsTrack({ track, play }) {
   }
 
   const handlePlusClose = () => {
-
+    
   }
 
   return (
@@ -30,7 +30,7 @@ function SearchResultsTrack({ track, play }) {
         <AddCircleOutlineIcon className="searchResult_song_icon" onClick={handlePlusClick}/>
         <Modal
         open={open}
-        onClose={handlePlusClose}
+        onClose={handlePlusClick}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
