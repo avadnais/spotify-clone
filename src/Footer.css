@@ -73,3 +73,28 @@
 .footer_green {
     color: green;
 }
+
+@media screen and (max-width: 600px){
+    
+    .footer{
+        padding: 0;
+        width: 100%;
+        height: 7vh
+    }
+    .footer_songInfo{
+        font-size: .7rem;
+    }
+    .footer_songInfo p {
+        font-size: .5rem;
+    }
+    .footer_left{
+        flex: .3;
+    }
+    .footer_center{
+        flex: .3;
+
+    }
+    .footer_right {
+        padding: 0;
+    }
+}

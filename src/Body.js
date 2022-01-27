@@ -112,8 +112,14 @@ function Body({ spotify }) {
     return (
       <div className="body">
         <Header spotify={spotify} />
-        <h1>Search results</h1>
         <div className="searchResults">
+        <h2>Playlists</h2>
+          <hr />
+          <div className="searchResults_playlists">
+            {search_results?.playlists?.items.map((item) => (
+              <SearchResultsPlaylist playlist={item} play={play} />
+            ))}
+          </div>
           <div className="searchResults_tracks">
             {search_results?.tracks?.items.map((item, i) => (
               <SearchResultsTrack i={i} track={item} play={play} />
@@ -131,13 +137,6 @@ function Body({ spotify }) {
           <div className="searchResults_artists">
             {search_results?.artists?.items.map((item) => (
               <p>{item.name}</p>
-            ))}
-          </div>
-          <h2>Playlists</h2>
-          <hr />
-          <div className="searchResults_playlists">
-            {search_results?.playlists?.items.map((item) => (
-              <SearchResultsPlaylist playlist={item} play={play} />
             ))}
           </div>
         </div>

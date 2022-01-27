@@ -1,7 +1,6 @@
 .body {
     width: 100vw;
     background: linear-gradient(rgb(55, 63, 81), rgba(0, 0, 0, 1));
-    flex: .8;
     height: 100vh;
     color: white;
     padding: 2rem;
@@ -73,3 +72,28 @@
     margin-right: .5rem;
 }
 
+@media screen and (max-width: 600px){
+    .body_infoText h2{
+        font-size: 1.5rem;
+    }
+    .body{
+        padding: 1rem;
+    }
+    .body_info{
+        padding:.5rem;
+        flex-direction: column;
+        margin: 0;
+        align-items: flex-start;
+    }
+
+    .body_songs {
+        margin: -0.5rem -4rem
+    }
+
+    .body_info .album_cover{
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        margin-bottom: 1rem;
+    }
+}

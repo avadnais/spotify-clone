@@ -33,7 +33,7 @@
 }
 
 .songRow_index_container {
-  width: 4rem;
+  min-width: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;

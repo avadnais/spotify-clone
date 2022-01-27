@@ -6,7 +6,8 @@ export const initialState = {
     spotify: null,
     loading: true,
     index: null,
-    volume: null
+    volume: null,
+    menu_open: true
 }
 
 // LISTENER
@@ -80,6 +81,11 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 search_results: action.search_results
+            }
+        case 'TOGGLE_MENU':
+            return {
+                ...state,
+                menu_open: !state.menu_open
             }
         default: 
             return state;
