@@ -16,7 +16,7 @@ export const App = () => {
     let _token = window.localStorage.getItem("token")
     if (!_token) {
       _token = getTokenFromURL().access_token;
-      window.history.pushState({}, null, "/"); //clear the url after the hash
+      window.history.pushState({}, null, "/spotify-clone"); //clear the url after the hash
 
       if (_token) {
         spotify.setAccessToken(_token);
