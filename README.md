@@ -16,5 +16,4 @@ Utilizes the Spotify Web API to emulate a spotify client. It does not include th
 
 - ReactJS
 - Spotify Web API JS
-- JS
 - CSS
