@@ -10,6 +10,8 @@ Utilizes the Spotify Web API to emulate a spotify client. It does not include th
 
 ***This app is not functional for Spotify users not listed on my Spotify Developer Account.***
 
+## Stack
+
 - React 
 - Spotify Web API JS
 - JS
